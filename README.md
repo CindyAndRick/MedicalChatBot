@@ -1,11 +1,13 @@
-# Chinese PM2.5 Data Display and Forecast System
+# Medical ChatBot Frontend
 
 frontend: React + Antd
 
-backend: Flask
+## Usage
 
-database: MySQL
+```bash
+# install packages
+npm i
 
-sipder: python requests
-
-AI: to be determined
+# run
+npm start
+```

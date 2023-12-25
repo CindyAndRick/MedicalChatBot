@@ -1,10 +1,10 @@
-import { API } from '../../utils/api.js';
+import { UserAPI } from "../../utils/api.js";
 
 // async function userLogin(value){
 //     const formData = new FormData();
 //     formData.append('username', value.username);
 //     formData.append('password', value.password);
-//     var login = await API({
+//     var login = await UserAPI({
 //         url: "user/login",
 //         method: "POST",
 //         data: formData
@@ -32,7 +32,7 @@ import { API } from '../../utils/api.js';
 //     formData.append('password', value.password);
 //     formData.append('nickname', value.nickname);
 //     formData.append('phone', value.phone);
-//     var register = await API({
+//     var register = await UserAPI({
 //         url: "user/register",
 //         method: "POST",
 //         data: formData
@@ -55,50 +55,47 @@ import { API } from '../../utils/api.js';
 // }
 
 async function verifyToken(token) {
-    var verifyToken = await API({
-        url: "user/verifyToken",
-        method: "POST",
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    }).then(
-        res => {
-            if (res.data.code === 200) {
-                return {
-                    type: 'VERIFY_TOKEN',
-                    payload: true
-                }
-            }
-            else {
-                return {
-                    type: 'VERIFY_TOKEN',
-                    payload: false
-                }
-            }
-        }
-    )
-    return verifyToken;
+  var verifyToken = await UserAPI({
+    url: "user/verifyToken",
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  }).then((res) => {
+    if (res.data.code === 200) {
+      return {
+        type: "VERIFY_TOKEN",
+        payload: true,
+      };
+    } else {
+      return {
+        type: "VERIFY_TOKEN",
+        payload: false,
+      };
+    }
+  });
+  return verifyToken;
 }
 
 function setIsLogin(value) {
-    return {
-        type: 'SET_IS_LOGIN',
-        payload: value
-    }
+  return {
+    type: "SET_IS_LOGIN",
+    payload: value,
+  };
 }
 
 function setToken(value) {
-    return {
-        type: 'SET_TOKEN',
-        payload: value
-    }
+  return {
+    type: "SET_TOKEN",
+    payload: value,
+  };
 }
 
 function setUserInfo(value) {
-    return {
-        type: 'SET_USER_INFO',
-        payload: value
-    }
+  return {
+    type: "SET_USER_INFO",
+    payload: value,
+  };
 }
 
-export { verifyToken, setIsLogin, setToken, setUserInfo }
+export { verifyToken, setIsLogin, setToken, setUserInfo };

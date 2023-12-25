@@ -1,1 +1,2 @@
-export const BASE_URL = 'http://139.224.130.38:5000';
+export const USER_URL = "http://101.133.165.164:5000/";
+export const CHAT_URL = "http://49.234.53.27:5000/";

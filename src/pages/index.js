@@ -1,5 +1,14 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
+import {
+  setHistory,
+  createConversation,
+  setConversationId,
+  setAllConversations,
+  getAllConversations,
+  getHistoryMessages,
+} from "../redux/actionCreator/ChatDataCreator";
 import {
   PieChartOutlined,
   UserOutlined,
@@ -20,25 +29,70 @@ function getItem(label, key, icon, children) {
   };
 }
 
-const items = [
-  // getItem('AQI地图', 'map', <PieChartOutlined />),
-  // getItem('AQI数据', 'data', <DesktopOutlined />),
-  getItem("用户", "center", <UserOutlined />),
-  getItem("新的聊天", "chat", <DesktopOutlined />),
-  getItem("历史记录", "history", <CloudOutlined />, [getItem("chat1", "3")]),
-];
-
 const Index = (props) => {
   // const [collapsed, setCollapsed] = useState(false);
   // const {
   //     token: { colorBgContainer },
   // } = theme.useToken();
 
+  const {
+    userInfo,
+    conversationId,
+    allConversations,
+    setHistory,
+    createConversation,
+    setConversationId,
+    setAllConversations,
+    getAllConversations,
+    getHistoryMessages,
+  } = props;
+
+  useEffect(() => {
+    getAllConversations(userInfo.user_id).then((res) => {
+      console.log(res);
+      setAllConversations(res.payload);
+    });
+  }, [conversationId]);
+
+  const items = useMemo(
+    () => [
+      // getItem('AQI地图', 'map', <PieChartOutlined />),
+      // getItem('AQI数据', 'data', <DesktopOutlined />),
+      getItem("用户", "center", <UserOutlined />),
+      getItem("新的聊天", "chat", <DesktopOutlined />),
+      getItem(
+        "历史记录",
+        "history",
+        <CloudOutlined />,
+        allConversations.map((item) => {
+          return getItem(item.conversation_name, item.conversation_id);
+        })
+      ),
+    ],
+    [allConversations, conversationId]
+  );
+
   const navigate = useNavigate();
 
   const onMenuClick = (e) => {
-    console.log("click", e);
-    navigate("/" + e.key);
+    console.log(e);
+    if (e.key === "chat") {
+      createConversation(userInfo.user_id).then((res) => {
+        setConversationId(res.payload.conversation_id);
+        getHistoryMessages(res.payload.conversation_id).then((res) => {
+          setHistory(res.payload);
+          navigate("/chat");
+        });
+      });
+    } else if (e.keyPath.at(-1) === "history") {
+      setConversationId(e.key);
+      getHistoryMessages(e.key).then((res) => {
+        setHistory(res.payload);
+        navigate("/chat");
+      });
+    } else {
+      navigate("/" + e.key);
+    }
   };
 
   return (
@@ -81,4 +135,22 @@ const Index = (props) => {
     </Layout>
   );
 };
-export default Index;
+
+const mapStateToProps = (state) => {
+  return {
+    userInfo: state.UserDataReducer.userInfo,
+    conversationId: state.ChatDataReducer.conversationId,
+    allConversations: state.ChatDataReducer.allConversations,
+  };
+};
+
+const mapDispatchToProps = {
+  setHistory,
+  createConversation,
+  setConversationId,
+  setAllConversations,
+  getAllConversations,
+  getHistoryMessages,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Index);

@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  setToken,
-  setIsLogin,
-  setUserInfo,
-} from "../../redux/actionCreator/UserDataCreator";
-import { getFavourCity } from "../../redux/actionCreator/CityDataCreator";
+  getHistoryMessages,
+  sendMessage,
+  checkResponse,
+  appendMessage,
+  setHistory,
+} from "../../redux/actionCreator/ChatDataCreator";
 import { connect } from "react-redux";
 import Cookies from "js-cookie";
-import { UserAPI } from "../../utils/api.js";
-import { Form, Button, Input, Checkbox, message, Layout, theme } from "antd";
+import { ChatAPI } from "../../utils/api.js";
+import { message, Layout, theme } from "antd";
+import ChatComponent from "./ChatComponent";
+
 const { Header, Content, Footer } = Layout;
 
 function Chat(props) {
@@ -17,14 +20,32 @@ function Chat(props) {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  let { setIsLogin, setToken, setUserInfo, getFavourCity } = props;
+  let {
+    isLogin,
+    token,
+    userInfo,
+    history,
+    conversationId,
+    getHistoryMessages,
+    sendMessage,
+    checkResponse,
+    appendMessage,
+    setHistory,
+  } = props;
 
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const handleToRegister = () => {
-    navigate(`/register`);
+  const handleToLogin = () => {
+    navigate(`/login`);
   };
+
+  useEffect(() => {
+    if (!isLogin) {
+      messageApi.error("请先登录");
+      handleToLogin();
+    }
+  }, []);
 
   return (
     <Layout>
@@ -47,7 +68,7 @@ function Chat(props) {
             background: colorBgContainer,
           }}
         >
-          <div></div>
+          <ChatComponent></ChatComponent>
         </div>
       </Content>
       <Footer
@@ -63,16 +84,20 @@ function Chat(props) {
 
 const mapStateToProps = (state) => {
   return {
+    userInfo: state.UserDataReducer.userInfo,
     token: state.UserDataReducer.token,
     isLogin: state.UserDataReducer.isLogin,
+    history: state.ChatDataReducer.history,
+    conversationId: state.ChatDataReducer.conversationId,
   };
 };
 
 const mapDispatchToProps = {
-  setToken,
-  setIsLogin,
-  setUserInfo,
-  getFavourCity,
+  getHistoryMessages,
+  sendMessage,
+  checkResponse,
+  appendMessage,
+  setHistory,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);

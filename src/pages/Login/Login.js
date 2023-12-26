@@ -45,7 +45,6 @@ function Login(props) {
         setUserInfo(res.data.data);
         Cookies.set("token", res.data.token);
         Cookies.set("userInfo", res.data.data);
-        getFavourCity(res.data.token);
         navigate(`/Chat`);
       } else {
         Cookies.remove("token");

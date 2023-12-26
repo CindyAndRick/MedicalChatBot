@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { setUserInfo } from "../../redux/actionCreator/UserDataCreator";
 import { UserAPI } from "../../utils/api";
 
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, Button, message, Radio } from "antd";
 
 function ChangeInfo(props) {
   const [form] = Form.useForm();
@@ -21,6 +21,13 @@ function ChangeInfo(props) {
     formData.append("username", values.username);
     formData.append("phone", values.phone);
     formData.append("nickname", values.nickname);
+    if (values.gender !== undefined) {
+      formData.append("gender", values.gender);
+    }
+    if (values.age !== undefined) {
+      formData.append("age", values.age);
+    }
+    formData.append("history_disease", values.history_disease);
     UserAPI({
       url: "user/update",
       method: "POST",
@@ -69,6 +76,9 @@ function ChangeInfo(props) {
           username: userInfo.username,
           phone: userInfo.phone,
           nickname: userInfo.nickname,
+          gender: userInfo.gender,
+          age: userInfo.age,
+          history_disease: userInfo.history_disease,
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -108,6 +118,18 @@ function ChangeInfo(props) {
             },
           ]}
         >
+          <Input />
+        </Form.Item>
+        <Form.Item label="性别" name="gender">
+          <Radio.Group>
+            <Radio value="male">男</Radio>
+            <Radio value="female">女</Radio>
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item label="年龄" name="age">
+          <Input />
+        </Form.Item>
+        <Form.Item label="历史疾病" name="history_disease">
           <Input />
         </Form.Item>
         <Form.Item

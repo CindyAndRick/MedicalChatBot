@@ -37,6 +37,12 @@ function Register(props) {
     formData.append("username", value.username);
     formData.append("password", value.password);
     formData.append("nickname", value.nickname);
+    if (value.gender !== undefined) {
+      formData.append("gender", value.gender);
+    }
+    if (value.age !== undefined) {
+      formData.append("age", value.age);
+    }
     formData.append("phone", value.phone);
     UserAPI({
       url: "user/register",
@@ -151,7 +157,13 @@ function Register(props) {
                 <Input.Password />
               </Form.Item>
               <Form.Item label="性别" name="gender">
-                <Radio></Radio>
+                <Radio.Group>
+                  <Radio value="male">男</Radio>
+                  <Radio value="female">女</Radio>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item label="年龄" name="age">
+                <Input />
               </Form.Item>
               <Form.Item
                 label="手机"

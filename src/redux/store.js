@@ -6,8 +6,8 @@ import {
 } from "redux";
 // import reduxThunk from 'redux-thunk';
 import reduxPromise from "redux-promise";
-import AQDataReducer from "./reducers/AQDataReducer";
-import CityDataReducer from "./reducers/CityDataReducer";
+// import AQDataReducer from "./reducers/AQDataReducer";
+// import CityDataReducer from "./reducers/CityDataReducer";
 import UserDataReducer from "./reducers/UserDataReducer";
 import ChatDataReducer from "./reducers/ChatDataReducer";
 
@@ -17,7 +17,7 @@ import storage from "redux-persist/lib/storage"; // defaults to localStorage for
 const persistConfig = {
   key: "root",
   storage,
-  // blacklist: ['UserDataReducer']
+  blacklist: ["ChatDataReducer"],
   // whitelist: [AQDataReducer, CityDataReducer, UserDataReducer]
 };
 

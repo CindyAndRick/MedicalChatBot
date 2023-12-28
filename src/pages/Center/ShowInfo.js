@@ -65,7 +65,7 @@ function ShowInfo(props) {
           changeView(1);
         }}
       >
-        修改账户信息
+        我不要修改账户信息
       </Button>
       <Button
         type="primary"

@@ -3,8 +3,8 @@ RUN mkdir /app
 WORKDIR /app
 COPY . .
 
-ENV REACT_APP_USER_API_URL=http://mcc-be-user-service:5000/
-ENV REACT_APP_CHAT_API_URL=http://mcc-be-chat-service:5000/
+ENV REACT_APP_USER_API_URL=http://101.133.165.164:5000/
+ENV REACT_APP_CHAT_API_URL=http://49.234.53.27:5000/
 
 RUN npm install && npm run build
 # RUN npm install 
